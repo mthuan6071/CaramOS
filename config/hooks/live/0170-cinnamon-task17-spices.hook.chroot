@@ -119,6 +119,11 @@ mkdir -p /etc/dconf/db/local.d
 cat > /etc/dconf/db/local.d/01-caramos-task17-panel <<'DCONF'
 [org/cinnamon]
 enabled-applets=['panel1:left:0:Cinnamenu@json', 'panel1:left:1:grouped-window-list@cinnamon.org', 'panel1:right:0:weather@mockturtl', 'panel1:right:1:systray@cinnamon.org', 'panel1:right:2:notifications@cinnamon.org', 'panel1:right:3:power@cinnamon.org', 'panel1:right:4:calendar@cinnamon.org']
+panels-height=['1:32']
+panel-scale-text-icons=false
+panel-zone-icon-sizes='[{"panelId": 1, "maxSize": 18}]'
+panel-zone-symbolic-icon-sizes='[{"panelId": 1, "left": 20, "center": 20, "right": 16}]'
+panel-zone-text-sizes='[{"panelId": 1, "left":0.0, "center":0.0, "right":0.0}]'
 favorite-apps=@as []
 
 [org/cinnamon/applets/grouped-window-list]
@@ -127,6 +132,34 @@ title-display=1
 number-display=false
 group-apps=true
 DCONF
+
+# Legacy systray icons from apps such as Fcitx5/Lotus can ignore Cinnamon's
+# panel-zone icon size settings and stretch to the full panel height. Cap them
+# directly in the stock systray applet so the right panel stays visually balanced.
+if [ -f /usr/share/cinnamon/applets/systray@cinnamon.org/applet.js ]; then
+    python3 - <<'PY'
+from pathlib import Path
+p = Path('/usr/share/cinnamon/applets/systray@cinnamon.org/applet.js')
+s = p.read_text()
+s = s.replace(
+    'this.icon_size = this.getPanelIconSize(St.IconType.FULLCOLOR) * global.ui_scale;',
+    'this.icon_size = Math.min(this.getPanelIconSize(St.IconType.FULLCOLOR) * global.ui_scale, 16 * global.ui_scale);'
+)
+s = s.replace(
+    'this.icon_size = this.getPanelIconSize() * global.ui_scale;',
+    'this.icon_size = Math.min(this.getPanelIconSize() * global.ui_scale, 16 * global.ui_scale);'
+)
+s = s.replace(
+    'icon.set_y_align(Clutter.ActorAlign.FILL);',
+    'icon.set_y_align(Clutter.ActorAlign.CENTER);'
+)
+s = s.replace(
+    'button.set_y_align(Clutter.ActorAlign.FILL);',
+    'button.set_y_align(Clutter.ActorAlign.CENTER);'
+)
+p.write_text(s)
+PY
+fi
 
 dconf update || true
 glib-compile-schemas /usr/share/glib-2.0/schemas/ || true

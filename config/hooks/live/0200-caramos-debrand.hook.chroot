@@ -4,7 +4,15 @@
 
 export DEBIAN_FRONTEND=noninteractive
 
+CARAMOS_VERSION="${CARAMOS_VERSION:-0.1}"
+MINT_VERSION="${MINT_VERSION:-22.3}"
+MINT_EDITION="${MINT_EDITION:-cinnamon}"
+CARAMOS_EDITION="${MINT_EDITION^}"
+CARAMOS_PRETTY_NAME="CaramOS ${CARAMOS_VERSION} ${CARAMOS_EDITION}"
+CARAMOS_BASE="Linux Mint ${MINT_VERSION}"
+
 echo "[CaramOS] === BẮT ĐẦU DE-BRANDING ==="
+echo "[CaramOS] Version: ${CARAMOS_VERSION} (base: ${CARAMOS_BASE})"
 
 # --- 0. Timezone Việt Nam (UTC+7) ---
 echo "[CaramOS] Đặt múi giờ Asia/Ho_Chi_Minh..."
@@ -18,39 +26,40 @@ echo "[CaramOS] Đổi OS identity..."
 
 # /etc/os-release
 if [ -f /etc/os-release ]; then
-    cat > /etc/os-release << 'EOF'
+    cat > /etc/os-release << EOF
 NAME="CaramOS"
-VERSION="22.3"
+VERSION="${CARAMOS_VERSION}"
 ID=caramos
-ID_LIKE="ubuntu debian"
-PRETTY_NAME="CaramOS 22.3"
-VERSION_ID="22.3"
+ID_LIKE="ubuntu debian linuxmint"
+PRETTY_NAME="${CARAMOS_PRETTY_NAME}"
+VERSION_ID="${CARAMOS_VERSION}"
 HOME_URL="https://github.com/VN-Linux-Family/CaramOS"
 SUPPORT_URL="https://github.com/VN-Linux-Family/CaramOS/issues"
 BUG_REPORT_URL="https://github.com/VN-Linux-Family/CaramOS/issues"
 PRIVACY_POLICY_URL="https://github.com/VN-Linux-Family/CaramOS"
-VERSION_CODENAME=wilma
+VERSION_CODENAME=caram
 UBUNTU_CODENAME=noble
+CARAMOS_BASE="${CARAMOS_BASE}"
 EOF
     echo "[OK] /etc/os-release"
 fi
 
 # /etc/lsb-release
 if [ -f /etc/lsb-release ]; then
-    cat > /etc/lsb-release << 'EOF'
+    cat > /etc/lsb-release << EOF
 DISTRIB_ID=CaramOS
-DISTRIB_RELEASE=22.3
-DISTRIB_CODENAME=wilma
-DISTRIB_DESCRIPTION="CaramOS 22.3"
+DISTRIB_RELEASE=${CARAMOS_VERSION}
+DISTRIB_CODENAME=caram
+DISTRIB_DESCRIPTION="${CARAMOS_PRETTY_NAME}"
 EOF
     echo "[OK] /etc/lsb-release"
 fi
 
 # /etc/linuxmint/info (neofetch đọc file này)
 if [ -f /etc/linuxmint/info ]; then
-    sed -i 's/GRUB_TITLE=.*/GRUB_TITLE=CaramOS/' /etc/linuxmint/info
-    sed -i 's/DESCRIPTION=.*/DESCRIPTION="CaramOS 22.3"/' /etc/linuxmint/info
-    sed -i 's/RELEASE=.*/RELEASE=22.3/' /etc/linuxmint/info
+    sed -i "s/GRUB_TITLE=.*/GRUB_TITLE=${CARAMOS_PRETTY_NAME}/" /etc/linuxmint/info
+    sed -i "s/DESCRIPTION=.*/DESCRIPTION=\"${CARAMOS_PRETTY_NAME}\"/" /etc/linuxmint/info
+    sed -i "s/RELEASE=.*/RELEASE=${CARAMOS_VERSION}/" /etc/linuxmint/info
     echo "[OK] /etc/linuxmint/info"
 fi
 
@@ -192,10 +201,10 @@ echo "[OK] neofetch/fastfetch logo config"
 # --- 7. Issue / Motd ---
 echo "[CaramOS] Đổi login banners..."
 if [ -f /etc/issue ]; then
-    echo "CaramOS 22.3 \\n \\l" > /etc/issue
+    printf 'CaramOS %s \\n \\l\n' "$CARAMOS_VERSION" > /etc/issue
 fi
 if [ -f /etc/issue.net ]; then
-    echo "CaramOS 22.3" > /etc/issue.net
+    printf 'CaramOS %s\n' "$CARAMOS_VERSION" > /etc/issue.net
 fi
 echo "[OK] /etc/issue"
 

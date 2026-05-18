@@ -4,6 +4,10 @@ set -e
 export DEBIAN_FRONTEND=noninteractive
 APT_LOCK_TIMEOUT="${APT_LOCK_TIMEOUT:-600}"
 APT_GET=(apt-get -o DPkg::Lock::Timeout="${APT_LOCK_TIMEOUT}")
+CARAMOS_VERSION="${CARAMOS_VERSION:-0.1}"
+MINT_EDITION="${MINT_EDITION:-cinnamon}"
+CARAMOS_EDITION="${MINT_EDITION^}"
+CARAMOS_PRETTY_NAME="CaramOS ${CARAMOS_VERSION} ${CARAMOS_EDITION}"
 
 preseed_fonts_eula() {
     echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections || true
@@ -19,11 +23,11 @@ disable_package_data_downloads() {
 
 write_os_release() {
     mkdir -p /usr/lib
-    cat > /tmp/caramos-os-release <<'OSREL'
-PRETTY_NAME="CaramOS 0.1 Cinnamon"
+    cat > /tmp/caramos-os-release <<OSREL
+PRETTY_NAME="${CARAMOS_PRETTY_NAME}"
 NAME="CaramOS"
-VERSION_ID="0.1"
-VERSION="0.1"
+VERSION_ID="${CARAMOS_VERSION}"
+VERSION="${CARAMOS_VERSION}"
 VERSION_CODENAME=caram
 ID=caramos
 ID_LIKE="ubuntu debian linuxmint"
@@ -101,27 +105,27 @@ printf 'caram\n' > /etc/hostname
 sed -i 's/\bmint\b/caram/gI' /etc/hosts 2>/dev/null || true
 
 write_os_release
-cat > /etc/lsb-release <<'LSB'
+cat > /etc/lsb-release <<LSB
 DISTRIB_ID=CaramOS
-DISTRIB_RELEASE=0.1
+DISTRIB_RELEASE=${CARAMOS_VERSION}
 DISTRIB_CODENAME=caram
-DISTRIB_DESCRIPTION="CaramOS 0.1 Cinnamon"
+DISTRIB_DESCRIPTION="${CARAMOS_PRETTY_NAME}"
 LSB
 mkdir -p /etc/linuxmint
-cat > /etc/linuxmint/info <<'MINTINFO'
-RELEASE=0.1
+cat > /etc/linuxmint/info <<MINTINFO
+RELEASE=${CARAMOS_VERSION}
 CODENAME=caram
-EDITION="Cinnamon"
-DESCRIPTION="CaramOS 0.1 Cinnamon"
+EDITION="${CARAMOS_EDITION}"
+DESCRIPTION="${CARAMOS_PRETTY_NAME}"
 DESKTOP=Gnome
 TOOLKIT=GTK
 NEW_FEATURES_URL=https://caramos.org/
 RELEASE_NOTES_URL=https://caramos.org/
 USER_GUIDE_URL=https://caramos.org/
-GRUB_TITLE=CaramOS 0.1 Cinnamon
+GRUB_TITLE=${CARAMOS_PRETTY_NAME}
 MINTINFO
-printf 'CaramOS 0.1 \\n \\l\n' > /etc/issue
-printf 'CaramOS 0.1\n' > /etc/issue.net
+printf 'CaramOS %s \\n \\l\n' "$CARAMOS_VERSION" > /etc/issue
+printf 'CaramOS %s\n' "$CARAMOS_VERSION" > /etc/issue.net
 find /usr/share/distro-info -type f -name '*.csv' -print0 2>/dev/null | \
     xargs -0 sed -i -e 's/Linux Mint/CaramOS/gI' -e 's/linuxmint/caramos/gI' 2>/dev/null || true
 

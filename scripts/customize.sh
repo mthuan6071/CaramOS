@@ -52,6 +52,9 @@ step_customize() {
             hook_name=$(basename "$hook")
             info "  → Chạy hook: $hook_name"
             cp "$hook" "$WORK_DIR/squashfs/tmp/$hook_name"
+            CARAMOS_VERSION="$CARAMOS_VERSION" \
+            MINT_VERSION="$MINT_VERSION" \
+            MINT_EDITION="$MINT_EDITION" \
             chroot "$WORK_DIR/squashfs" /bin/bash "/tmp/$hook_name"
             rm -f "$WORK_DIR/squashfs/tmp/$hook_name"
             ok "Hook $hook_name xong."
