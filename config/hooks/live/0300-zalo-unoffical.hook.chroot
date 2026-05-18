@@ -1,6 +1,6 @@
 #!/bin/bash
 #!/usr/bin/env bash
-
+echo "Cài Zalo..."
 set -e
 
 APP_NAME="Zalo"
@@ -36,7 +36,7 @@ echo "==> Tạo shortcut .desktop"
 cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Name=Zalo
-Comment=Zalo
+Comment=Unemployed or Nightmare everyday?
 Exec=$APPIMAGE_PATH
 Icon=$ICON_PATH
 Terminal=false
