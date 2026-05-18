@@ -54,17 +54,9 @@ else
 fi
 
 # --- Themes/assets ---
-echo "[CaramOS] Installing ChromeOS GTK theme..."
-if wget -q -O /tmp/chromeos-theme.zip "https://github.com/vinceliuice/ChromeOS-theme/archive/refs/heads/master.zip"; then
-    unzip -qo /tmp/chromeos-theme.zip -d /tmp/
-    cd /tmp/ChromeOS-theme-master
-    mkdir -p /root/.config/gtk-4.0
-    ./install.sh || true
-    cd /
-    rm -rf /tmp/chromeos-theme.zip /tmp/ChromeOS-theme-master
-fi
+echo "[CaramOS] Using Cinnamon Delight theme from Task 17; ChromeOS theme is intentionally not installed."
 
-echo "[CaramOS] Installing Tela Circle icon theme..."
+echo "[CaramOS] Installing Cinnamon Delight icons..."
 if wget -q -O /tmp/tela-icons.zip "https://github.com/vinceliuice/Tela-circle-icon-theme/archive/refs/heads/master.zip"; then
     unzip -qo /tmp/tela-icons.zip -d /tmp/
     cd /tmp/Tela-circle-icon-theme-master
@@ -168,10 +160,10 @@ fi
 
 if [ -f /usr/share/glib-2.0/schemas/mint-artwork.gschema.override ]; then
     sed -i \
-        -e "s|Mint-Y-Dark-Aqua|CaramOS-Light|g" \
-        -e "s|Mint-Y-Dark|CaramOS-Light|g" \
-        -e "s|Mint-Y-Aqua|ChromeOS-Light|g" \
-        -e "s|Mint-Y-Sand|Tela-circle|g" \
+        -e "s|Mint-Y-Dark-Aqua|Cinnamon-Delight|g" \
+        -e "s|Mint-Y-Dark|Cinnamon-Delight|g" \
+        -e "s|Mint-Y-Aqua|Cinnamon-Delight|g" \
+        -e "s|Mint-Y-Sand|Tela-circle-light|g" \
         -e "s|/usr/share/backgrounds/linuxmint/default_background.jpg|/usr/share/backgrounds/caramos/default.png|g" \
         -e "s|linuxmint-logo-ring-symbolic|caramos-logo-symbolic|g" \
         /usr/share/glib-2.0/schemas/mint-artwork.gschema.override
@@ -180,15 +172,9 @@ fi
 if [ -f /etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf ]; then
     sed -i \
         -e "s|/usr/share/backgrounds/linuxmint/default_background.jpg|/usr/share/backgrounds/caramos/default.png|g" \
-        -e "s|Mint-Y-Aqua|ChromeOS-Light|g" \
-        -e "s|Mint-Y-Sand|Tela-circle|g" \
+        -e "s|Mint-Y-Aqua|Cinnamon-Delight|g" \
+        -e "s|Mint-Y-Sand|Tela-circle-light|g" \
         /etc/lightdm/lightdm-gtk-greeter.conf.d/99_linuxmint.conf
-fi
-
-if [ -d /usr/share/themes/Mint-Y-Aqua/cinnamon ]; then
-    mkdir -p /usr/share/themes/CaramOS-Light
-    rm -rf /usr/share/themes/CaramOS-Light/cinnamon
-    cp -a /usr/share/themes/Mint-Y-Aqua/cinnamon /usr/share/themes/CaramOS-Light/cinnamon
 fi
 
 mkdir -p /etc/dconf/profile /etc/dconf/db/local.d
@@ -202,31 +188,35 @@ app-menu-icon-name='caramos-logo-symbolic'
 system-icon='caramos-logo-symbolic'
 
 [org/cinnamon/theme]
-name='CaramOS-Light'
+name='Cinnamon-Delight'
 
 [org/cinnamon/desktop/interface]
-gtk-theme='ChromeOS-Light'
-icon-theme='Tela-circle'
+gtk-theme='Cinnamon-Delight'
+icon-theme='Tela-circle-light'
 cursor-theme='Bibata-Modern-Classic'
 font-name='Be Vietnam Pro 10'
 clock-show-date=true
 clock-use-24h=true
 
 [org/cinnamon/desktop/wm/preferences]
-theme='ChromeOS-Light'
+theme='Cinnamon-Delight'
 
 [org/gnome/desktop/interface]
-gtk-theme='ChromeOS-Light'
-icon-theme='Tela-circle'
+gtk-theme='Cinnamon-Delight'
+icon-theme='Tela-circle-light'
 cursor-theme='Bibata-Modern-Classic'
 font-name='Be Vietnam Pro 10'
 
 [org/gnome/desktop/wm/preferences]
-theme='ChromeOS-Light'
+theme='Cinnamon-Delight'
 
 [org/cinnamon/applets/grouped-window-list]
-pinned-apps=['google-chrome.desktop','wps-office-wps.desktop','wps-office-et.desktop','wps-office-wpp.desktop','nemo.desktop','org.gnome.Terminal.desktop']
+pinned-apps=['google-chrome.desktop','wps-office-prometheus.desktop','cinnamon-settings.desktop']
 DCONF
+
+if [ -f /usr/share/applications/nemo.desktop ] && ! grep -q '^StartupWMClass=' /usr/share/applications/nemo.desktop; then
+    printf '\nStartupWMClass=Nemo\n' >> /usr/share/applications/nemo.desktop
+fi
 if command -v dconf >/dev/null 2>&1; then
     dconf update || true
 fi
