@@ -22,145 +22,283 @@
 
 ---
 
-### CaramOS là gì?
+## CaramOS là gì?
 
-**CaramOS** là bản phân phối Linux dựa trên [Linux Mint](https://linuxmint.com/), được thiết kế đặc biệt cho **người dùng Việt Nam**. Mục tiêu của CaramOS là phổ thông hoá Linux — giúp mọi người chuyển từ Windows sang Linux một cách dễ dàng, miễn phí, và hợp pháp.
+**CaramOS** là bản phân phối Linux dựa trên **Linux Mint 22.3 Cinnamon**
+(Ubuntu 24.04 LTS), được thiết kế đặc biệt cho **người dùng Việt Nam**.
+Dự án được build theo hướng **ISO remaster**: bung ISO Linux Mint gốc,
+tuỳ biến rootfs bằng packages/overlay/hooks, rồi đóng gói lại thành ISO CaramOS.
 
-> Sứ mệnh của CaramOS là **phổ thông hoá Linux** — mọi thứ được làm đơn giản nhất có thể, phần mềm cài sẵn và sẵn sàng sử dụng, đồng thời cố gắng mang những ứng dụng quen thuộc từ Windows đến cho người dùng.
+Mục tiêu của CaramOS là phổ thông hoá Linux — giúp người dùng Việt chuyển từ
+Windows sang Linux dễ hơn, có sẵn giao diện thân thiện, bộ gõ tiếng Việt,
+trình duyệt, ứng dụng văn phòng và các tiện ích quen thuộc.
 
-### Tính năng nổi bật
+## Tính năng nổi bật
 
 | Tính năng | Mô tả |
 |---|---|
-| **Giao diện Chrome OS** | Sạch sẽ, hiện đại, icon tròn — đẹp ngay từ lần đầu |
-| **Việt hoá 100%** | Tiếng Việt mặc định, bộ gõ fcitx5 cài sẵn, font Việt đẹp |
-| **Google Chrome** | Trình duyệt quen thuộc, cài sẵn |
-| **Cập nhật an toàn** | mintupdate phân loại mức độ rủi ro — không bao giờ tự update hỏng máy |
-| **Backup 1 click** | Timeshift tạo snapshot — hỏng máy thì khôi phục trong 2 phút |
-| **Driver tự động** | Tự phát hiện và cài driver WiFi, GPU (NVIDIA/AMD/Intel) |
-| **Chia sẻ file LAN** | Warpinator — gửi file giữa các máy như AirDrop |
-| **Nhẹ và nhanh** | Chạy mượt trên máy cấu hình thấp |
+| **Dựa trên Linux Mint 22.3** | Nền Ubuntu 24.04 LTS ổn định, desktop Cinnamon quen thuộc |
+| **Giao diện CaramOS** | Branding CaramOS, boot menu/Plymouth, logo, wallpaper, panel và theme được tuỳ biến |
+| **Tiếng Việt mặc định** | Locale Việt Nam, timezone Asia/Ho_Chi_Minh, font Be Vietnam Pro |
+| **Bộ gõ tiếng Việt** | Fcitx5 + Lotus được cài và cấu hình sẵn |
+| **Google Chrome** | Trình duyệt phổ biến được cài sẵn |
+| **WPS Office** | Bộ ứng dụng văn phòng thân thiện với người dùng chuyển từ Windows |
+| **Zalo** | Zalo AppImage được cài sẵn và có shortcut ngoài Desktop |
+| **Cinnamon Delight + Tela/Bibata** | Theme, icon và cursor hiện đại, nhẹ, dễ nhìn |
+| **Neofetch/Fastfetch CaramOS** | Logo ASCII màu và OS identity đồng bộ theo version CaramOS |
+| **Build linh hoạt** | Dev build nhanh bằng `lz4`, release build nhỏ hơn bằng `xz`, hỗ trợ Docker |
 
-### Ảnh chụp màn hình
+## Công nghệ sử dụng
 
-> *Sẽ cập nhật khi phát hành bản beta đầu tiên*
-
-### Cài đặt
-
-#### Bước 1: Tải ISO
-
-```bash
-# Sẽ cập nhật link tải khi phát hành
-# CaramOS.iso          — Intel/AMD (nhẹ)
-# CaramOS-nvidia.iso   — Có sẵn driver NVIDIA
-```
-
-#### Bước 2: Ghi ra USB
-
-```bash
-# Linux / macOS
-sudo dd if=CaramOS.iso of=/dev/sdX bs=4M status=progress
-
-# Hoặc dùng Balena Etcher (GUI, mọi hệ điều hành)
-# https://etcher.balena.io
-```
-
-#### Bước 3: Khởi động từ USB & cài đặt
-
-1. Khởi động lại máy, vào BIOS/UEFI (nhấn F2/F12/Del)
-2. Chọn boot từ USB
-3. Chọn **"Cài đặt CaramOS"**
-4. Làm theo hướng dẫn trên màn hình (hoàn toàn tiếng Việt)
-
-<!-- Caram Center — Phase 2 -->
-
-### Công nghệ sử dụng
-
-| Thành phần | Công nghệ |
+| Thành phần | Công nghệ / cấu hình hiện tại |
 |---|---|
-| **Base** | [Linux Mint 22](https://linuxmint.com/) (Ubuntu 24.04 LTS) |
-| **Desktop** | [Cinnamon](https://github.com/linuxmint/cinnamon) |
-| **Login** | [SDDM](https://github.com/sddm/sddm) |
-| **Build** | ISO Remaster — `sudo ./build.sh` → ISO |
-| **Theme** | [ChromeOS-theme](https://github.com/vinceliuice/ChromeOS-theme) + [Tela Circle](https://github.com/vinceliuice/Tela-circle-icon-theme) + [Bibata](https://github.com/ful1e5/Bibata_Cursor) |
-| **Font** | [Be Vietnam Pro](https://fonts.google.com/specimen/Be+Vietnam+Pro) |
-| **Browser** | Google Chrome (cài sẵn) |
-| **Input** | [fcitx5](https://fcitx-im.org/) — bộ gõ tiếng Việt |
-| **Apps** | VLC, GIMP, LibreOffice, Flameshot, Nemo, xed |
-| **System** | TLP, Timeshift, Warpinator, Flatpak, DKMS |
+| **Base ISO** | Linux Mint 22.3 Cinnamon 64-bit |
+| **Ubuntu base** | Ubuntu 24.04 LTS / noble |
+| **Desktop** | Cinnamon |
+| **Display manager** | LightDM theo Linux Mint base |
+| **Build method** | ISO remaster: extract → customize → repack |
+| **Build scripts** | Bash + Makefile |
+| **Compression dev** | SquashFS `lz4` |
+| **Compression release** | SquashFS `xz` |
+| **Theme** | Cinnamon Delight |
+| **Icons** | Tela circle / Cinnamon Delight Icons |
+| **Cursor** | Bibata |
+| **Font** | Be Vietnam Pro |
+| **Input method** | Fcitx5 + Lotus |
+| **Browser** | Google Chrome |
+| **Office** | WPS Office |
+| **Chat** | Zalo AppImage |
 
-> 📖 Chi tiết kiến trúc, cấu trúc thư mục, và cách build → [CONTRIBUTING.md](CONTRIBUTING.md)
+## Cấu trúc dự án
 
-### Build ISO
+```text
+./
+├── build.sh              # Script build chính
+├── Makefile              # Target build/dev/release/debug
+├── scripts/              # Module build
+│   ├── config.sh         # Version, base ISO, mirror, output ISO
+│   ├── utils.sh          # Log, deps, download ISO, mount helpers
+│   ├── extract.sh        # Mount ISO + rsync + unsquashfs
+│   ├── customize.sh      # Chroot + packages + overlay + hooks
+│   ├── repack.sh         # mksquashfs + xorriso
+│   ├── boot_config.sh    # Boot menu + Plymouth branding
+│   ├── overlay.sh        # Copy config/includes.chroot vào rootfs
+│   ├── chroot_shell.sh   # Debug chroot
+│   └── debug_iso.sh      # Kiểm tra ISO/boot branding
+├── config/
+│   ├── packages.txt      # Packages cài thêm
+│   ├── hooks/live/       # Hook chạy trong chroot theo thứ tự NNNN-*.hook.chroot
+│   └── includes.chroot/  # Overlay copy trực tiếp vào rootfs
+├── assets/               # Logo/banner/source assets
+├── Dockerfile            # Docker builder
+└── docker-compose.yml    # Docker build entrypoint
+```
+
+## Version & release model
+
+CaramOS dùng mô hình version giống Linux kernel: **version nằm trong source tree**,
+không lấy tag làm nguồn duy nhất.
+
+Version được khai báo trong [scripts/config.sh](scripts/config.sh):
+
+```bash
+CARAMOS_VERSION_MAJOR=1
+CARAMOS_VERSION_MINOR=0
+CARAMOS_VERSION_PATCH=1
+CARAMOS_VERSION_EXTRA=""
+CARAMOS_CODENAME="Open Beta"
+CARAMOS_VERSION="${CARAMOS_VERSION_MAJOR}.${CARAMOS_VERSION_MINOR}.${CARAMOS_VERSION_PATCH}${CARAMOS_VERSION_EXTRA}"
+```
+
+Version này được dùng cho:
+
+- tên ISO: `CaramOS-<version>-cinnamon-amd64.iso`
+- boot menu/boot branding
+- `/etc/os-release`
+- `/etc/lsb-release`
+- `/etc/linuxmint/info`
+- `neofetch` / `fastfetch`
+- GitHub Release artifact
+
+Khi release production, Git tag phải khớp version trong source.
+Ví dụ source version là `1.0.1` thì tag hợp lệ là:
+
+```bash
+v1.0.1
+```
+
+Nếu tag không khớp, GitHub Actions sẽ fail trước khi build release.
+
+## Build ISO local
 
 Cài dependency build trên Ubuntu/Mint/Debian:
 
 ```bash
-sudo apt install squashfs-tools xorriso rsync wget curl isolinux syslinux-common
+sudo apt update
+sudo apt install squashfs-tools xorriso rsync wget curl isolinux syslinux-common syslinux-utils
 ```
 
-Clone repo và build nhanh bản dev:
+Build dev đầy đủ, nén `lz4` để test nhanh:
 
 ```bash
-git clone git@github.com:VN-Linux-Family/CaramOS.git
-cd CaramOS
 make build
 ```
 
-Các target `make` thường dùng:
+Build release local, nén `xz` để ISO nhỏ hơn:
+
+```bash
+make release
+```
+
+Build từ ISO Mint có sẵn:
+
+```bash
+make build ISO=linuxmint-22.3-cinnamon-64bit.iso
+```
+
+## Make targets
 
 | Lệnh | Mục đích |
 |---|---|
-| `make build` | Build dev đầy đủ, nén `lz4` để test nhanh |
-| `make release` | Build bản release, nén `xz` nhỏ hơn nhưng lâu hơn |
-| `make prepare` | Bung ISO/rootfs ra `build/` để sửa và test nhanh |
+| `make build` | Build dev đầy đủ, nén `lz4` |
+| `make release` | Build release, nén `xz` |
+| `make prepare` | Bung ISO/rootfs ra `build/` để sửa nhanh |
 | `make customize-only` | Chạy packages, overlay và hooks trong rootfs |
-| `make boot-only` | Chỉ áp dụng boot menu, GRUB và Plymouth branding |
 | `make overlay` | Chỉ copy `config/includes.chroot` vào rootfs |
 | `make quick` | Prepare nếu cần, overlay, repack squashfs và ISO |
 | `make repack` | Đóng gói lại squashfs và ISO từ work tree hiện có |
 | `make iso-only` | Chỉ tạo lại ISO từ `build/custom` |
+| `make boot-only` | Chỉ áp dụng boot menu, GRUB và Plymouth branding |
 | `make shell` | Vào chroot `build/squashfs` để debug thủ công |
-| `make debug-iso` | In trạng thái boot menu/Plymouth để kiểm tra |
-| `make clean` | Dọn toàn bộ build/cache/output ISO |
+| `make debug-iso` | Kiểm tra boot menu/Plymouth/branding của ISO |
+| `make clean` | Xoá build/cache/output ISO |
+| `make clean-work` | Xoá work tree, giữ cache extract |
+| `make clean-cache` | Xoá cache extract/work tree |
 | `make docker-build` | Build dev trong Docker |
 | `make docker-release` | Build release trong Docker |
+| `make docker-clean` | Clean build bằng Docker |
 
-Ví dụ workflow sửa nhanh boot splash:
+## Workflow sửa nhanh
 
-```bash
-make boot-only
-make iso-only
-```
-
-Ví dụ workflow sửa overlay/theme/app config:
+Sau lần build/prepare đầu tiên, nếu chỉ sửa overlay/hook/theme/app config:
 
 ```bash
 make customize-only
 make quick
 ```
 
-> 📖 Hướng dẫn đầy đủ (ghi USB, test VM, build .deb) → [CONTRIBUTING.md](CONTRIBUTING.md#build-iso)
+Nếu chỉ sửa boot menu/Plymouth:
 
-### Đóng góp
+```bash
+make boot-only
+make iso-only
+```
 
-Chúng tôi hoan nghênh mọi đóng góp! Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết:
-- Kiến trúc dự án & cấu trúc thư mục
-- Cách build ISO & test
-- Quy trình đóng góp code
-- Tiêu chuẩn commit & code
+Debug trong chroot:
 
-### Giấy phép
+```bash
+make shell
+```
 
-CaramOS là phần mềm **mã nguồn mở** theo giấy phép [GPL-3.0](LICENSE).
+## Docker build
 
-### Cảm ơn
+Dùng Docker nếu máy không phải Ubuntu/Mint/Debian phù hợp:
+
+```bash
+make docker-build
+```
+
+Release build trong Docker:
+
+```bash
+make docker-release
+```
+
+## GitHub Actions release
+
+Workflow CI nằm ở [.github/workflows/build.yml](.github/workflows/build.yml).
+
+- Push/PR vào branch `main` hoặc `develop`: build dev ISO bằng `./build.sh`.
+- Push tag `v*`: kiểm tra tag khớp source version, build release bằng `./build.sh --release`, tạo `SHA256SUMS`, upload artifact và tạo GitHub Release.
+
+Quy trình release `1.0.1`:
+
+```bash
+# 1. Bump version trong scripts/config.sh nếu cần
+# CARAMOS_VERSION_MAJOR=1
+# CARAMOS_VERSION_MINOR=0
+# CARAMOS_VERSION_PATCH=1
+
+# 2. Commit và merge vào main
+git add scripts/config.sh
+git commit -m "[release] bump CaramOS to 1.0.1"
+git push
+
+# 3. Sau khi merge main
+git checkout main
+git pull origin main
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+GitHub Release sẽ đính kèm:
+
+```text
+CaramOS-1.0.1-cinnamon-amd64.iso
+SHA256SUMS
+```
+
+## Cài đặt cho người dùng cuối
+
+### 1. Tải ISO
+
+Tải ISO từ trang GitHub Releases của dự án sau khi có bản phát hành.
+
+### 2. Ghi ra USB
+
+Linux/macOS:
+
+```bash
+sudo dd if=CaramOS-1.0.1-cinnamon-amd64.iso of=/dev/sdX bs=4M status=progress oflag=sync
+```
+
+Hoặc dùng Balena Etcher/Ventoy trên mọi hệ điều hành.
+
+### 3. Boot và cài đặt
+
+1. Khởi động lại máy, vào BIOS/UEFI bằng F2/F12/Del/Esc tuỳ máy.
+2. Chọn boot từ USB.
+3. Chọn live session hoặc **Cài đặt CaramOS**.
+4. Làm theo hướng dẫn cài đặt trên màn hình.
+
+## Đóng góp
+
+Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết thêm về kiến trúc, quy ước hook,
+quy trình build/test và hướng dẫn đóng góp.
+
+Quy ước nhanh:
+
+| Task | Vị trí |
+|---|---|
+| Thêm package | `config/packages.txt` |
+| Tạo hook mới | `config/hooks/live/NNNN-name.hook.chroot` |
+| Sửa overlay hệ thống | `config/includes.chroot/` |
+| Sửa version | `scripts/config.sh` |
+| Sửa workflow release | `.github/workflows/build.yml` |
+
+## Giấy phép
+
+CaramOS là phần mềm mã nguồn mở theo giấy phép [GPL-3.0](LICENSE).
+
+## Cảm ơn
 
 - [Linux Mint](https://linuxmint.com/) — Base distro tuyệt vời
+- [Ubuntu](https://ubuntu.com/) — Nền tảng LTS ổn định
 - [VNLF (Vietnam Linux Family)](https://vietnamlinuxfamily.net) — Cộng đồng Linux Việt Nam
-- [vinceliuice](https://github.com/vinceliuice) — ChromeOS-theme, Tela Circle icons
-- [Bottles](https://usebottles.com/) — Chạy app Windows trên Linux
-- [Lutris](https://lutris.net/) — Chạy game Windows trên Linux
+- [DrMcC0y](https://github.com/DrMcC0y) — Cinnamon Delight theme/icons
+- [vinceliuice](https://github.com/vinceliuice) — Tela Circle icons
+- [ful1e5](https://github.com/ful1e5) — Bibata cursor
+- Cộng đồng Linux/FOSS Việt Nam
 
 ---
 
