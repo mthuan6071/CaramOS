@@ -110,6 +110,7 @@ jobs:
           CHECKSUM_URL="https://sourceforge.net/projects/${SOURCEFORGE_PROJECT}/files/${GITHUB_REF_NAME}/SHA256SUMS/download"
           python3 - <<PY
           from pathlib import Path
+          import textwrap
 
           github_ref_name = "${GITHUB_REF_NAME}"
           iso_basename = "${ISO_BASENAME}"
@@ -117,7 +118,8 @@ jobs:
           checksum_url = "${CHECKSUM_URL}"
           sourceforge_project = "${SOURCEFORGE_PROJECT}"
 
-          release_body = f"""## Download CaramOS {github_ref_name}
+          release_body = f"""
+          ## Download CaramOS {github_ref_name}
 
           > GitHub Release cannot host the ISO directly because release assets have a
           > per-file size limit. The ISO is hosted as one complete file on SourceForge.
@@ -139,7 +141,7 @@ jobs:
           ```
           """
 
-          Path("RELEASE_DOWNLOADS.md").write_text(release_body, encoding="utf-8")
+          Path("RELEASE_DOWNLOADS.md").write_text(textwrap.dedent(release_body).strip() + "\n", encoding="utf-8")
           PY
 
       - name: Create GitHub Release
@@ -149,4 +151,5 @@ jobs:
           files: |
             SHA256SUMS
           body_path: RELEASE_DOWNLOADS.md
+          append_body: true
           generate_release_notes: true
