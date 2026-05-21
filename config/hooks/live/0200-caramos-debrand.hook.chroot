@@ -229,18 +229,28 @@ echo "[OK] Plymouth"
 echo "[CaramOS] Tắt Mint welcome screen..."
 # Disable mintwelcome (sẽ thay bằng CaramOS Center sau)
 if [ -f /etc/xdg/autostart/mintWelcome.desktop ]; then
-    sed -i 's/^Exec=.*/Exec=true/' /etc/xdg/autostart/mintWelcome.desktop
+    sed -i 's/^Exec=.*/Exec=mintwelcome/' /etc/xdg/autostart/mintWelcome.desktop
     echo "[OK] mintWelcome disabled"
 fi
 
 # --- 11. Mint System branding files ---
 echo "[CaramOS] Đổi remaining branding files..."
 # Các file text chứa "Linux Mint" trong /usr/share/linuxmint/
-find /usr/share/linuxmint -type f \( -name "*.py" -o -name "*.desktop" -o -name "*.json" -o -name "*.xml" \) \
+find /usr/share/linuxmint -type f \( -name "*.py" -o -name "*.desktop" -o -name "*.json" -o -name "*.xml" -o -name "*.ui" \) \
     -exec sed -i 's/Linux Mint/CaramOS/gI' {} + 2>/dev/null || true
 echo "[OK] /usr/share/linuxmint/"
-
+find /usr/lib/linuxmint -type f -name "*.py" -exec \
+    sed -i 's/Linux Mint/CaramOS/gI' {} + 2>/dev/null || true
 echo ""
+if command -v msgunfmt &>/dev/null && command -v msgfmt &>/dev/null; then
+    for mo in $(find /usr/share/linuxmint/locale -name "mintwelcome.mo"); do
+        po=$(mktemp --suffix=.po)
+        msgunfmt "$mo" > "$po"
+        sed -i 's/Linux Mint/CaramOS/gI' "$po"
+        msgfmt "$po" -o "$mo"
+        rm "$po"
+    done
+fi
 echo "========================================="
 echo "[CaramOS] De-branding Verification:"
 echo "  os-release:   $(grep PRETTY_NAME /etc/os-release 2>/dev/null)"
