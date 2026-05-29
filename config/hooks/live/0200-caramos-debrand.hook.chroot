@@ -98,6 +98,16 @@ if [ -f /etc/skel/Desktop/ubiquity.desktop ]; then
     sed -i 's/Install Linux Mint/Install CaramOS/gI' /etc/skel/Desktop/ubiquity.desktop
 fi
 
+# Ghim Software Manager ra Desktop cho user mặc định
+SKEL_DESKTOP_DIR="/etc/skel/Desktop"
+mkdir -p "$SKEL_DESKTOP_DIR"
+if [ -f /usr/share/applications/mintinstall.desktop ]; then
+    cp -f /usr/share/applications/mintinstall.desktop "$SKEL_DESKTOP_DIR/mintinstall.desktop"
+    chmod +x "$SKEL_DESKTOP_DIR/mintinstall.desktop"
+    gio set "$SKEL_DESKTOP_DIR/mintinstall.desktop" metadata::trusted true 2>/dev/null || true
+    echo "[OK] Pin Software Manager to Desktop"
+fi
+
 # --- 5. Casper/Live session config ---
 echo "[CaramOS] Đổi casper config..."
 # File casper.conf hoặc live.conf
